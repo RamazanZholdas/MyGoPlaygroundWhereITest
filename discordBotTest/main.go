@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	translate "github.com/RamazanZholdas/testingFlagsHere/translateRussian"
+	//translate "github.com/RamazanZholdas/testingFlagsHere/translateRussian"
 
+	translate "github.com/RamazanZholdas/testingFlagsHere/translateRussian"
 	"github.com/gocolly/colly"
 )
 
@@ -35,7 +36,6 @@ func main() {
 	movie, rating := "Dallas", ""
 	name, nextUrl, timing, info := "", "", "", ""
 	VisitUrl := "https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D=forma&m_act%5Bwhat%5D=content&m_act%5Bfind%5D=" + movie + "&m_act%5Byear%5D=" + year + "&m_act%5Bcountry%5D=" + id
-	fmt.Println(VisitUrl)
 	c := colly.NewCollector()
 
 	c.OnError(func(r *colly.Response, err error) {
@@ -88,7 +88,7 @@ func main() {
 	//fmt.Println(slice)
 	fmt.Println(sliceVal)
 
-	file, err := os.Open("countries.json")
+	file, err := os.Open("NameGenre.json")
 	if err != nil {
 		log.Fatal(err)
 	}
