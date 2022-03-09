@@ -1,0 +1,20 @@
+{
+    "Content": [
+        "фильм",
+        "сериал",
+        "обои",
+        "фотографии",
+        "постеры",
+        "трейлеры",
+        "DVD"
+    ],
+    "ContentTranslate":[
+        "film",
+        "serial",
+        "wallpaper",
+        "kadr",
+        "poster",
+        "trailer",
+        "product"
+    ]
+}

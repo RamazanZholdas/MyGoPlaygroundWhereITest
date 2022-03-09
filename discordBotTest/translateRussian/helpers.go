@@ -16,6 +16,11 @@ type Genre struct {
 	GenreName []string `json:"GenreName"`
 }
 
+type Content struct {
+	Content          []string `json:"Content"`
+	ContentTranslate []string `json:"ContentTranslate"`
+}
+
 func CheckGenre(str string) (string, error) {
 	byteSlice, err := os.ReadFile("./Genre.json")
 	if err != nil {
@@ -58,4 +63,26 @@ func CheckCountry(str string) (string, error) {
 	}
 
 	return "", errors.New("country does not exist")
+}
+
+func CheckContent(str string) (string, error) {
+	byteSlice, err := os.ReadFile("./Content.json")
+	if err != nil {
+		return "", err
+	}
+
+	data := Content{}
+
+	err = json.Unmarshal(byteSlice, &data)
+	if err != nil {
+		return "", err
+	}
+
+	for i := range data.Content {
+		if data.Content[i] == str {
+			return data.ContentTranslate[i], nil
+		}
+	}
+
+	return "", errors.New("content-type does not exist")
 }

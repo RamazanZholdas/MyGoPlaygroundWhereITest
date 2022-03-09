@@ -20,6 +20,11 @@ https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D
 %5Bwhat%5D=content&m_act%5Bfind%5D=Texas&m_act%5Byear%5D=2012&m_act%5Bcountry%5D=136&m_act%5Bgenre%5D%5B%5D=11
 &m_act%5Bactor%5D=Dylan&m_act%5Bcast%5D=Roy&m_act%5Bcontent_find%5D=serial&m_act%5Bgenre_and%5D=on
 */
+/*
+https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D=forma&m_act
+%5Bwhat%5D=content&m_act%5Bfind%5D=%C4%E0%EB%EB%E0%F1&m_act%5Byear%5D=2013&m_act%5Bcountry%5D=1&m_act%5Bgenre%5D%5B%5D=8
+&m_act%5Bactor%5D=Matthew&m_act%5Bcontent_find%5D=film&m_act%5Bgenre_and%5D=on
+*/
 
 type SelectOption struct {
 	Id   []string `json:"id"`
@@ -33,9 +38,14 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	genre := "боевик"
+	idForGenre, err := translate.CheckGenre(genre)
+	if err != nil {
+		log.Fatal(err)
+	}
 	movie, rating := "Dallas", ""
 	name, nextUrl, timing, info := "", "", "", ""
-	VisitUrl := "https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D=forma&m_act%5Bwhat%5D=content&m_act%5Bfind%5D=" + movie + "&m_act%5Byear%5D=" + year + "&m_act%5Bcountry%5D=" + id
+	VisitUrl := "https://www.kinopoisk.ru/index.php?level=7&from=forma&result=adv&m_act%5Bfrom%5D=forma&m_act%5Bwhat%5D=content&m_act%5Bfind%5D=" + movie + "&m_act%5Byear%5D=" + year + "&m_act%5Bcountry%5D=" + id + "&m_act%5Bgenre%5D%5B%5D=" + idForGenre
 	c := colly.NewCollector()
 
 	c.OnError(func(r *colly.Response, err error) {
