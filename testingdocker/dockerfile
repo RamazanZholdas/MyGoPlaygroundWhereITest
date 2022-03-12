@@ -1,0 +1,8 @@
+FROM go
+
+WORKDIR /testingdocker
+
+COPY . .
+
+CMD ["go", "main.go"]
+
