@@ -1,0 +1,11 @@
+Expose - порт
+Workdir - создание директории внутри image-а
+Run - запускается один раз при сборке docker image
+Cmd - запускается каждый раз при запуске
+Copy [dir where dockerfile is stored or any else] [dir inside docker image] - копирует локальные файлы в docker image 
+docker start [id of container here] - для старта контейнера
+docker run -d [id of image here] - запуск докер контейнара в фоновом режиме
+docker run -r [ports of local machine]:[ports of docker image] [id of image here] - запускает докер image на 
+порту локальной машины который ты указал с левой стороны бря порт с докер image-а 
+docker stop [id of image here] - выключает контейнер
+
