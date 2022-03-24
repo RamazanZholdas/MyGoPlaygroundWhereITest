@@ -1,34 +1,38 @@
 package main
 
-import "fmt"
+import (
+	"bytes"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+)
 
-type color struct {
-	a, b, c, d int
+type User struct {
+	Name    string `json:"name"`
+	Country string `json:"country"`
 }
 
 func main() {
-	mainMem := [16][16]color{}
-	cache := [8]color{} //block size = 4
-	g := 0
-	counter := 0
-	counter2 := 0
-	for i := 0; i < 16; i++ {
-		for j := 0; j < 16; j++ {
-			mainMem[j][i].a = 0
-			mainMem[j][i].b = 0
-			mainMem[j][i].c = 1
-			mainMem[j][i].d = 0
-			counter2++
-		}
-		for k := range cache {
-			cache[k] = mainMem[k][g]
-			g++
-			counter++
-		}
-		g = 0
+	file, err := os.OpenFile("file.txt", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
+	if err != nil {
+		log.Fatal(err)
 	}
-	fmt.Println("number of accesses to cache: ", counter)
-	fmt.Println("number of accesses to main memory: ", counter2)
-	fmt.Println("total:", counter2+counter)
+	defer file.Close()
 
+	buf := new(bytes.Buffer)
+	enc := json.NewEncoder(buf)
+
+	data := User{
+		Name:    "Ainur",
+		Country: "KZ",
+	}
+
+	if err := enc.Encode(data); err != nil {
+		log.Fatal(err)
+	}
+
+	file.Write(buf.Bytes())
+	bslice, _ := os.ReadFile(file.Name())
+	fmt.Println(string(bslice))
 }

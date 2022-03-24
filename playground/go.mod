@@ -1,3 +1,3 @@
-module ramazans/playground
+module golangPlayground
 
 go 1.17
