@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -95,7 +96,13 @@ func main() {
 		if err = cursor2.Decode(&singleSong); err != nil {
 			log.Fatal(err)
 		}
+		var f interface{}
 		fmt.Println("song:", singleSong)
+		byteSlice := toBsonBytes(singleSong)
+		if err := json.Unmarshal(byteSlice, &f); err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(f)
 	}
 	fmt.Println()
 
@@ -116,4 +123,14 @@ func main() {
 	}
 
 	fmt.Println("fSongs called give it away", fSongs)
+
+}
+
+func toBsonBytes(smth bson.M) []byte {
+	data, err := bson.Marshal(smth)
+	if nil != err {
+		fmt.Println("Сериализация Bson не удалась")
+		return nil
+	}
+	return data
 }

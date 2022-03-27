@@ -2,19 +2,23 @@ package main
 
 import (
 	"fmt"
-	"html"
 	"log"
-	"net/http"
+	"os"
+
+	"github.com/joho/godotenv"
 )
 
+func init() {
+	fmt.Println("Init func launched")
+
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
+}
+
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, %q", html.EscapeString(r.URL.Path))
-	})
-
-	http.HandleFunc("/hi", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "hi ur on hi page")
-	})
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	truth, ok := os.LookupEnv("AINUR")
+	if ok {
+		fmt.Println("Truth:", truth)
+	}
 }
