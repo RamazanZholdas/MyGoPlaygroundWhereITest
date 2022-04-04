@@ -1,19 +1,20 @@
 package main
 
-import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"log"
-	"os"
-)
+import "fmt"
 
 type User struct {
-	Name    string `json:"name"`
-	Country string `json:"country"`
+	Incrementer int
 }
 
 func main() {
+	
+}
+
+func (u *User) Increment() {
+	u.Incrementer++
+}
+
+/*
 	file, err := os.OpenFile("file.txt", os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0600)
 	if err != nil {
 		log.Fatal(err)
@@ -35,4 +36,4 @@ func main() {
 	file.Write(buf.Bytes())
 	bslice, _ := os.ReadFile(file.Name())
 	fmt.Println(string(bslice))
-}
+*/
