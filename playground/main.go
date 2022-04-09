@@ -1,17 +1,65 @@
 package main
 
-import "fmt"
+import (
+	"encoding/base64"
+	"log"
+	"net/http"
+	"time"
 
-type User struct {
-	Incrementer int
+	"github.com/dgrijalva/jwt-go"
+	"github.com/gin-gonic/gin"
+)
+
+type Token struct {
+	GUID string
+	jwt.StandardClaims
 }
+
+var SECRET_KEY string = "secret"
 
 func main() {
-	
+	c := gin.Default()
+
+	c.GET("/page1/:name", func(c *gin.Context) {
+		name := c.Param("name")
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Hello " + name,
+		})
+	})
+
+	c.GET("/s/", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "Hello World")
+	})
+
+	c.Run(":8080")
 }
 
-func (u *User) Increment() {
-	u.Incrementer++
+func GenerateTokens(uid string) (signedToken string, signedRefreshToken string, err error) {
+	claims := &Token{
+		GUID: base64.RawURLEncoding.EncodeToString([]byte(uid)),
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(24)).Unix(),
+		},
+	}
+
+	refreshClaims := &Token{
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Local().Add(time.Hour * time.Duration(168)).Unix(),
+		},
+	}
+
+	token, err := jwt.NewWithClaims(jwt.SigningMethodHS256, claims).SignedString([]byte(SECRET_KEY))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	refreshToken, err := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshClaims).SignedString([]byte(SECRET_KEY))
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	return token, refreshToken, err
 }
 
 /*

@@ -21,4 +21,8 @@ func main() {
 	if ok {
 		fmt.Println("Truth:", truth)
 	}
+	port, ok := os.LookupEnv("PORT")
+	if ok {
+		fmt.Println("Port:", port)
+	}
 }
