@@ -3,22 +3,32 @@ package main
 import (
 	"fmt"
 	"sync"
-	"time"
 )
 
-func main() {
-	now := time.Now()
-	var wg sync.WaitGroup
-	wg.Add(1)
-	go work(&wg)
-	wg.Wait()
-	fmt.Println("main end")
-	fmt.Println("Time passed", time.Since(now))
-}
+type request func()
 
-func work(wg *sync.WaitGroup) {
-	defer wg.Done()
-	fmt.Println("work")
-	time.Sleep(time.Second)
-	fmt.Println("work end")
+func main() {
+	requests := map[int]request{}
+	for i := 1; i <= 100; i++ {
+		f := func(n int) request {
+			return func() {
+				fmt.Println("request", n)
+			}
+		}
+		requests[i] = f(i)
+	}
+
+	var wg sync.WaitGroup
+	max := 10
+	for i := 0; i < len(requests); i += max {
+		for j := i; j < i+max; j++ {
+			wg.Add(1)
+			go func(r request) {
+				defer wg.Done()
+				r()
+			}(requests[j+1])
+		}
+		wg.Wait()
+		fmt.Println("10 requests done")
+	}
 }
